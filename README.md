@@ -7,7 +7,7 @@ Thanks to [dafzor](https://github.com/dafzor) for making the original [bnetlaunc
 Sadly the original program no longer functions (for me at least), and they no longer maintain nor merge PR's for fixes. 
 Likewise, launchpad, the only other alternative, no longer works either due to dead external dependancies. 
 
-This is a continutation using my previous origin-launcher / fortnite launcher framework as a more reliable 
+This is a continutation using my previous [rumbleverse-launcher](https://github.com/ShizCalev/rumbleverse-launcher) / [fortnite launcher](https://github.com/ShizCalev/fortnite-launcher) framework as a more reliable 
 / futureproof method (assuming Blizzard doesn't change Battle.net's launch parameters.)
 
 ## Purpose
