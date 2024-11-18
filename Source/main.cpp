@@ -181,7 +181,7 @@ int main(int argc, char **argv)
     LPCTSTR oDir;
     if (argv[2]!=NULL){
         oDir = argv[2];}
-    else oDir = "C:/PROGRA~2/Battle.net/Battle.net.exe";
+    else oDir = "C:/Program Files (x86)/Battle.net/Battle.net.exe";
     //check if battlenet is running
     if (IsRunning("Battle.net.exe")){
         Kill("Battle.net.exe");}
