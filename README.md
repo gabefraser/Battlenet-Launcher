@@ -1,16 +1,22 @@
-# Battlenet Steam Overlay Launcher
+# Battle.net Steam Overlay Launcher
 
 
 Launcher utility to help start battle.net games with the steam overlay.
 
-Thanks to dafzor / https://github.com/dafzor/bnetlauncher for making the original version years ago. Sadly they don't seem to maintain the original anymore, nor does launchpad work due to depreciated / dead dependancies. 
+Thanks to [dafzor](https://github.com/dafzor) for making the original [bnetlauncher](https://github.com/dafzor/bnetlauncher) years ago. 
+Sadly the original program no longer functions (for me at least), and they no longer maintain nor merge PR's for fixes. 
+Likewise, launchpad, the only other alternative, no longer works either due to dead external dependancies. 
 
-This is a continutation using my previous origin-launcher / fortnite launcher framework as a more reliable / futureproof method (assuming Blizzard doesn't change Battle.net's launch parameters.)
+This is a continutation using my previous origin-launcher / fortnite launcher framework as a more reliable 
+/ futureproof method (assuming Blizzard doesn't change Battle.net's launch parameters.)
+
+## Purpose
+
+This application is intended to facilitate the launch of battle.net games from steam with overlay
+with minimal/no interaction with the battle.net client while still being automatically logged in.
 
 
 ## Usage
-
-If your Battle.net isn't installed at the default location, add the full path to Battle.net.exe as a launch parameter. ie; "C:/PROGRA~2/Battle.net/Battle.net.exe"
 
 1. Extract the included exe to any location you want (ex: steam folder)
 2. Add the exe to steam as a non-steam game shortcut
@@ -52,6 +58,10 @@ If your Battle.net isn't installed at the default location, add the full path to
 The result should look something like the example below:
 
 `"G:\Steam\Battlenet-Launcher.exe" ow`
+
+If your Battle.net isn't installed at the default location, add the full path to Battle.net.exe as a secondary argument;
+
+ie; `"G:\Steam\Battlenet-Launcher.exe" ow "C:/PROGRA~2/Battle.net/Battle.net.exe"`
 
 ## World of Warcraft Classic - Season of Discovery
 
