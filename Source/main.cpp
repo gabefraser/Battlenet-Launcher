@@ -196,11 +196,18 @@ int main(int argc, char **argv)
     //launch game
     Start(oDir, oID);
     for (int i = 1; i<10; i++){
-        Sleep (1000);}	
+        Sleep (1000);
+		if (IsRunning(gEX)) {
+			break;
+		}
+	}
 	if (!IsRunning(gEX)) {
 		Start(oDir, oID);
 		for (int i = 1; i < 10; i++) {
 			Sleep(1000);
+			if (IsRunning(gEX)) {
+				break;
+			}
 		}
 		//exit if game does not start after 2 attempts over 20s
 		if (!IsRunning(gEX)) {
