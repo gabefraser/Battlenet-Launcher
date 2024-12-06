@@ -173,30 +173,34 @@ int main(int argc, char **argv)
 		oID = "--exec=\"launch wowt\"";
 		gEX = "WowT.exe";
 	}
-    else {
-        MessageBox(0, "Please specify a valid parameter: \n\nBlizzard Arcade Collection = rtro\nCall of Duty HQ = codhq\nCall of Duty: Black Ops 4 = codbo4\nCall of Duty: Black Ops Cold War = codbocw\nCall of Duty: Modern Warfare = codmw2019\nCall of Duty: Modern Warfare 2 Campaign Remastered = codmw2cr\nCall of Duty: MWII | WZ2.0 = codmw2\nCall of Duty: Vanguard = codvg\nCrash Bandicoot 4: It's About Time = cb4\nDiablo 2: Resurrected = d2r\nDiablo 3 = d3\nDiablo 3 Public Test Realm = d3ptr\nDiablo 4 = d4\nDiablo Immortal = di\nHearthstone = hs\nHeroes of the Storm = hots\nHeroes of the Storm Public Test Realm = hotsptr\nOverwatch = ow\nOverwatch Public Test Realm = owptr\nStarcraft 2 = sc2\nStarcraft Remastered = scr\nWarcraft 1: Orcs & Humans = w1\nWarcraft 1: Remastered = w1r\nWarcraft 2: Battle.net Edition = w2\nWarcraft 2: Remastered = w2r\nWarcraft 3: Reforged = w3\nWorld of Warcraft = wow\nWorld of Warcraft Classic = wowclassic\nWorld of Warcraft Public Test Realm = wowptr", "Error", MB_OK);
-        return TRUE;
-        }
-    //determine battlenet directory
-    LPCTSTR oDir;
-    if (argv[2]!=NULL){
-        oDir = argv[2];}
-    else oDir = "C:/Program Files (x86)/Battle.net/Battle.net.exe";
-    //check if battlenet is running
-    if (IsRunning("Battle.net.exe")){
-        Kill("Battle.net.exe");}
-    //start battlenet as child program
-    if (Start(oDir,oID) <= 32){
-        MessageBox(0, "Failed to launch Battle.net. \nMake sure it's installed in its default location.", "Error", MB_OK);
-        return TRUE;}
-    while (!IsRunning("Battle.net.exe")){
-        Sleep(1000);}
-    //wait for battlenet to go idle
-    Sleep(8000);
-    //launch game
-    Start(oDir, oID);
-    for (int i = 1; i<10; i++){
-        Sleep (1000);
+	else {
+		MessageBox(0, "Please specify a valid parameter: \n\nBlizzard Arcade Collection = rtro\nCall of Duty HQ = codhq\nCall of Duty: Black Ops 4 = codbo4\nCall of Duty: Black Ops Cold War = codbocw\nCall of Duty: Modern Warfare = codmw2019\nCall of Duty: Modern Warfare 2 Campaign Remastered = codmw2cr\nCall of Duty: MWII | WZ2.0 = codmw2\nCall of Duty: Vanguard = codvg\nCrash Bandicoot 4: It's About Time = cb4\nDiablo 2: Resurrected = d2r\nDiablo 3 = d3\nDiablo 3 Public Test Realm = d3ptr\nDiablo 4 = d4\nDiablo Immortal = di\nHearthstone = hs\nHeroes of the Storm = hots\nHeroes of the Storm Public Test Realm = hotsptr\nOverwatch = ow\nOverwatch Public Test Realm = owptr\nStarcraft 2 = sc2\nStarcraft Remastered = scr\nWarcraft 1: Orcs & Humans = w1\nWarcraft 1: Remastered = w1r\nWarcraft 2: Battle.net Edition = w2\nWarcraft 2: Remastered = w2r\nWarcraft 3: Reforged = w3\nWorld of Warcraft = wow\nWorld of Warcraft Classic = wowclassic\nWorld of Warcraft Public Test Realm = wowptr", "Error", MB_OK);
+		return TRUE;
+		}
+	//determine battlenet directory
+	LPCTSTR oDir;
+	if (argv[2]!=NULL){
+		oDir = argv[2];
+	}
+	else oDir = "C:/Program Files (x86)/Battle.net/Battle.net.exe";
+	//check if battlenet is running
+	if (IsRunning("Battle.net.exe")){
+		Kill("Battle.net.exe");
+	}
+	//start battlenet as child program
+	if (Start(oDir, "--autostarted") <= 32) {
+		MessageBox(0, "Failed to launch Battle.net. \nMake sure it's installed in its default location.", "Error", MB_OK);
+		return TRUE;
+	}
+	while (!IsRunning("Battle.net.exe")){
+		Sleep(1000);
+	}
+	//wait for battlenet to go idle
+	Sleep(8000);
+	//launch game
+	Start(oDir, oID);
+	for (int i = 1; i<10; i++){
+		Sleep (1000);
 		if (IsRunning(gEX)) {
 			break;
 		}
@@ -216,45 +220,55 @@ int main(int argc, char **argv)
 			return TRUE;
 		}
 	}
-    //wait for game to close
-    while (IsRunning(gEX)){
-        Sleep(1000);}
-    //give some time for cloud sync
-    Sleep(8000);
-    //Close battlenet
-    Kill("Battle.net.exe");
-    return FALSE;
+	LPCTSTR WindowName = "Battle.net";
+	HWND Find = FindWindow(NULL, WindowName);
+	//close all the battle.net client windows that open up when you launch a game. gross.
+	while (Find) {
+		PostMessage(Find, WM_CLOSE, 0, 0);
+		Sleep(1);
+		Find = FindWindow(NULL, WindowName);
+	}
+	//wait for game to close
+	while (IsRunning(gEX)){
+		Sleep(1000);
+	}
+	//usually we'd sleep here before closing the client to allow for cloudsave syncing, but battle.net's saves are typically handled by the games themselves.
+	//Close battlenet
+	Kill("Battle.net.exe");
+	return FALSE;
 }
 
 //--------------- F U N C T I O N S ---------------//
 
 HANDLE GetHndl(LPCTSTR pName){
-    PROCESSENTRY32 entry;
-    entry.dwSize = sizeof(PROCESSENTRY32);
-    HANDLE snapshot = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, NULL);
-    if (Process32First(snapshot, &entry) == TRUE){
-        while (Process32Next(snapshot, &entry) == TRUE){
-            if (_stricmp(entry.szExeFile, pName ) == 0){
-            HANDLE hProcess = OpenProcess(PROCESS_ALL_ACCESS, FALSE, entry.th32ProcessID);
-            CloseHandle(snapshot);
-            return hProcess;}}
-    }return FALSE;
+	PROCESSENTRY32 entry;
+	entry.dwSize = sizeof(PROCESSENTRY32);
+	HANDLE snapshot = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, NULL);
+	if (Process32First(snapshot, &entry) == TRUE){
+		while (Process32Next(snapshot, &entry) == TRUE){
+			if (_stricmp(entry.szExeFile, pName ) == 0){
+			HANDLE hProcess = OpenProcess(PROCESS_ALL_ACCESS, FALSE, entry.th32ProcessID);
+			CloseHandle(snapshot);
+			return hProcess;
+			}
+		}
+	}return FALSE;
 }
 
 int Start(LPCTSTR pName, LPCTSTR pArgs){
-    HINSTANCE h = ShellExecute(NULL,"open",pName,pArgs,NULL,SW_SHOW);
-    int r = (int) h;
-    return r;
+	HINSTANCE h = ShellExecute(NULL,"open",pName,pArgs,NULL,SW_SHOW);
+	int r = (int) h;
+	return r;
 }
 
 bool IsRunning(LPCTSTR pName){
-    if (GetHndl(pName)==0)
-        return FALSE;
-    return TRUE;
+	if (GetHndl(pName)==0)
+		return FALSE;
+	return TRUE;
 }
 
 void Kill(LPCTSTR pName){
-    HANDLE hProcess = GetHndl(pName);
-    TerminateProcess(hProcess, 0 );
+	HANDLE hProcess = GetHndl(pName);
+	TerminateProcess(hProcess, 0 );
 }
 
