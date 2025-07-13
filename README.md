@@ -53,6 +53,7 @@ with minimal/no interaction with the battle.net client while still being automat
 |World of Warcraft | wow|
 |World of Warcraft Classic | wowclassic|
 |World of Warcraft Public Test Realm | wowptr|
+|Tony Hawk Pro Skater 3+4 | thps34|
 
 
 The result should look something like the example below:
