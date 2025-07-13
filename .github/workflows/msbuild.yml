@@ -47,4 +47,6 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: Battlenet-Launcher-Build
-        path: ${{env.GITHUB_WORKSPACE}}/Release
+        path: |
+          ${{env.GITHUB_WORKSPACE}}/Release/**
+          ${{env.GITHUB_WORKSPACE}}/x64/Release/**
